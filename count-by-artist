@@ -1,0 +1,36 @@
+#!/usr/bin/perl -w
+# Copyright © 2008 Kevin Spencer <kevin@kevinspencer.org>
+#
+# Permission to use, copy, modify, distribute, and sell this software and its
+# documentation for any purpose is hereby granted without fee, provided that
+# the above copyright notice appear in all copies and that both that
+# copyright notice and this permission notice appear in supporting
+# documentation.  No representations are made about the suitability of this
+# software for any purpose.  It is provided "as is" without express or 
+# implied warranty.
+#
+################################################################################
+
+use strict;
+
+our $VERSION = '0.22';
+
+my $library = 'iTunes Music Library.xml';
+open(LIBRARY, $library) || die "Could not open $library - $!\n";
+my %count;
+
+# no need for XML::Simple, regex parsing suffices here...
+while (<LIBRARY>) {
+    my $line = $_;
+    if ($line =~ /<key>Artist<\/key><string>(.+)<\/string>/) {
+        my $artist = $1;
+        $count{$artist}++;
+    }
+}
+close(LIBRARY);
+if (%count) {
+    for my $artist (reverse(sort { $count{$a} <=> $count{$b} } keys(%count))) {
+        printf "%4d %s\n", $count{$artist}, $artist;
+    }
+}
+
