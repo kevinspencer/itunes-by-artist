@@ -1,0 +1,8 @@
+count-by-artist
+
+Parses an iTunes library XML file to count the number of songs by each artist.
+
+USAGE
+
+    cd $path-with-library-file
+    count-by-artist
