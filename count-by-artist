@@ -12,12 +12,13 @@
 ################################################################################
 
 use Getopt::Std;
+use HTML::Entities;
 use strict;
 
 getopts('c:');
 our $opt_c;
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 
 if (($opt_c) && ($opt_c =~ /\D/)) {
     die "Count specified with -c must be numeric\n";
@@ -40,7 +41,8 @@ close(LIBRARY);
 if (%count) {
     my $counter = 0;
     for my $artist (reverse(sort { $count{$a} <=> $count{$b} } keys(%count))) {
-        printf "%4d %s\n", $count{$artist}, $artist;
+        my $decoded_artist = decode_entities($artist);
+        printf "%4d %s\n", $count{$artist}, $decoded_artist;
         $counter++;
         last if (($opt_c) && ($opt_c == $counter));
     }
