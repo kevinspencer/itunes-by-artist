@@ -4,5 +4,5 @@ Parses an iTunes library XML file to count the number of songs by each artist.
 
 USAGE
 
-    cd $path-with-library-file
     count-by-artist
+    count-by-artist -c 10 (displays top 10 only)
