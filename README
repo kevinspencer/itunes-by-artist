@@ -1,8 +1,8 @@
-count-by-artist
+itunes-by-artist
 
 Parses an iTunes library XML file to count the number of songs by each artist.
 
 USAGE
 
-    count-by-artist
-    count-by-artist -c 10 (displays top 10 only)
+    itunes-by-artist
+    itunes-by-artist -c 10 (displays top 10 only)
