@@ -1,5 +1,5 @@
-#!/usr/bin/perl -w
-# Copyright © 2008 Kevin Spencer <kevin@kevinspencer.org>
+#!/usr/bin/env perl
+# Copyright © 2008-2012 Kevin Spencer <kevin@kevinspencer.org>
 #
 # Permission to use, copy, modify, distribute, and sell this software and its
 # documentation for any purpose is hereby granted without fee, provided that
@@ -14,11 +14,12 @@
 use Getopt::Std;
 use HTML::Entities;
 use strict;
+use warnings;
 
 getopts('c:');
 our $opt_c;
 
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 
 if (($opt_c) && ($opt_c =~ /\D/)) {
     die "Count specified with -c must be numeric\n";
@@ -26,18 +27,18 @@ if (($opt_c) && ($opt_c =~ /\D/)) {
 
 my $user = getpwuid($<);
 my $libraryPath = "/Users/$user/Music/iTunes/iTunes Music Library.xml";
-open(LIBRARY, $libraryPath) || die "Could not open $libraryPath - $!\n";
+open(my $lfh, '<', $libraryPath) || die "Could not open $libraryPath - $!\n";
 
 my %count;
 # regex XML parsing for the win...
-while (<LIBRARY>) {
+while (<$lfh>) {
     my $line = $_;
     if ($line =~ /<key>Artist<\/key><string>(.+)<\/string>/) {
         my $artist = $1;
         $count{$artist}++;
     }
 }
-close(LIBRARY);
+close($lfh);
 if (%count) {
     my $counter = 0;
     for my $artist (reverse(sort { $count{$a} <=> $count{$b} } keys(%count))) {
